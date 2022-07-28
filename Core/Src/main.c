@@ -22,6 +22,7 @@
 #include "i2s.h"
 #include "spi.h"
 #include "tim.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -46,7 +47,11 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+  uint32_t hi2s1_Data[4]={0};
+//  uint16_t hi2s2_Data[2]={0};
+//  uint16_t hi2s3_Data[2]={0};
+  uint32_t val24;
+  int val32;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,7 +63,38 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/*
+ * 重写printf
+ */
+#ifdef __GNUC__
+#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
 
+PUTCHAR_PROTOTYPE
+{
+	HAL_UART_Transmit(&huart4, (uint8_t*)&ch,1,HAL_MAX_DELAY);
+    return ch;
+}
+/*
+ * 重写printf
+ */
+
+void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s)
+{
+	if(hi2s==&hi2s1){
+		//将两�?32整型合并为一�?
+		//dat32 example: 0000fffb 00004f00
+		val24=(hi2s1_Data[0]<<8)+(hi2s1_Data[1]>>8);
+		//�?24位有符号整型扩展�?32�?
+		if(val24 & 0x800000){//negative
+			val32=0xff000000 | val24;
+		}else{//positive
+			val32=val24;
+		}
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -92,34 +128,62 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_SPI4_Init();
+  MX_DMA_Init();
   MX_I2S1_Init();
   MX_I2S2_Init();
   MX_I2S3_Init();
-  MX_DMA_Init();
-  MX_TIM3_Init();
-  MX_SPI4_Init();
   MX_TIM1_Init();
+  MX_TIM3_Init();
+  MX_UART4_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
-  uint16_t hi2s1_Data[128];
-  uint16_t hi2s2_Data[128];
-  uint16_t hi2s3_Data[128];
-  uint32_t PWM=TIM3->CCR1;
-  uint8_t  Pos_Neg=1;
-  HAL_I2S_Receive_DMA(&hi2s1, hi2s1_Data, 128);
-  HAL_I2S_Receive_DMA(&hi2s2, hi2s2_Data, 128);
-  HAL_I2S_Receive_DMA(&hi2s3, hi2s3_Data, 128);
+
+//  uint32_t PWM=TIM3->CCR1;
+//  uint8_t  Pos_Neg=1;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   LCD_Test();
+  uint8_t text[20]={0};
 
+  HAL_I2S_Receive_DMA(&hi2s1, (uint16_t*)hi2s1_Data, 4);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+
+//	  if(Pos_Neg)
+//	  {
+//		  PWM+=10;
+//	  }
+//	  else
+//	  {
+//		  PWM-=10;
+//	  }
+//
+//	  if (PWM>2500)
+//	  {
+//		  Pos_Neg=0;
+//	  }
+//	  else if(PWM<500)
+//	  {
+//		  Pos_Neg=1;
+//	  }
+//	  else
+//	  {
+//		  TIM3->CCR1=PWM;
+//	  }
+
+		sprintf((char *)&text, "%8d", hi2s1_Data[0]);
+		LCD_ShowString(4, 58, 256, 16, 16, text);
+		printf("%d,%d,%d,%d,%d\r\n",hi2s1_Data[0],hi2s1_Data[1],hi2s1_Data[2],hi2s1_Data[3],val32);
+
+
 
   }
   /* USER CODE END 3 */
@@ -210,7 +274,7 @@ void PeriphCommonClock_Config(void)
                               |RCC_PERIPHCLK_SPI1;
   PeriphClkInitStruct.PLL2.PLL2M = 10;
   PeriphClkInitStruct.PLL2.PLL2N = 128;
-  PeriphClkInitStruct.PLL2.PLL2P = 20;
+  PeriphClkInitStruct.PLL2.PLL2P = 2;
   PeriphClkInitStruct.PLL2.PLL2Q = 2;
   PeriphClkInitStruct.PLL2.PLL2R = 2;
   PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_1;

@@ -9,6 +9,7 @@
 "./Core/Src/sysmem.o"
 "./Core/Src/system_stm32h7xx.o"
 "./Core/Src/tim.o"
+"./Core/Src/usart.o"
 "./Core/Startup/startup_stm32h750vbtx.o"
 "./Drivers/LCD_ST7735/Src/lcd.o"
 "./Drivers/LCD_ST7735/Src/logo_128_160.o"
@@ -37,3 +38,5 @@
 "./Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi_ex.o"
 "./Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.o"
 "./Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.o"
+"./Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.o"
+"./Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.o"

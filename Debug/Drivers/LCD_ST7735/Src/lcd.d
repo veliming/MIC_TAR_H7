@@ -33,6 +33,8 @@ Drivers/LCD_ST7735/Src/lcd.o: ../Drivers/LCD_ST7735/Src/lcd.c \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h \
+ ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h \
+ ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h \
  ../Drivers/LCD_ST7735/Inc/st7735.h \
  ../Drivers/LCD_ST7735/Inc/st7735_reg.h ../Drivers/LCD_ST7735/Inc/font.h \
  ../Core/Inc/spi.h ../Core/Inc/main.h ../Core/Inc/tim.h
@@ -71,6 +73,8 @@ Drivers/LCD_ST7735/Src/lcd.o: ../Drivers/LCD_ST7735/Src/lcd.c \
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_tim_ex.h:
+../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h:
+../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h:
 ../Drivers/LCD_ST7735/Inc/st7735.h:
 ../Drivers/LCD_ST7735/Inc/st7735_reg.h:
 ../Drivers/LCD_ST7735/Inc/font.h:
