@@ -195,9 +195,9 @@ int main(void)
 //  LCD_Test();
 //  uint8_t text[20]={0};
 
-  HAL_I2S_Receive_DMA(&hi2s1, (uint16_t*)hi2s1_Data, 2);
-  HAL_I2S_Receive_DMA(&hi2s2, (uint16_t*)hi2s2_Data, 2);
-  HAL_I2S_Receive_DMA(&hi2s3, (uint16_t*)hi2s3_Data, 2);
+  HAL_I2S_Receive_DMA(&hi2s1, (uint16_t*)hi2s1_Data,&hi2s2, (uint16_t*)hi2s2_Data,&hi2s3, (uint16_t*)hi2s3_Data,2);
+//  HAL_I2S_Receive_DMA(&hi2s2, (uint16_t*)hi2s2_Data, 2);
+//  HAL_I2S_Receive_DMA(&hi2s3, (uint16_t*)hi2s3_Data, 2);
   while (1)
   {
     /* USER CODE END WHILE */

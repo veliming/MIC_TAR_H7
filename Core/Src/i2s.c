@@ -83,7 +83,7 @@ void MX_I2S2_Init(void)
   hi2s2.Init.FirstBit = I2S_FIRSTBIT_MSB;
   hi2s2.Init.WSInversion = I2S_WS_INVERSION_DISABLE;
   hi2s2.Init.Data24BitAlignment = I2S_DATA_24BIT_ALIGNMENT_RIGHT;
-  hi2s2.Init.MasterKeepIOState = I2S_MASTER_KEEP_IO_STATE_DISABLE;
+  hi2s2.Init.MasterKeepIOState = I2S_MASTER_KEEP_IO_STATE_ENABLE;
   if (HAL_I2S_Init(&hi2s2) != HAL_OK)
   {
     Error_Handler();
@@ -114,7 +114,7 @@ void MX_I2S3_Init(void)
   hi2s3.Init.FirstBit = I2S_FIRSTBIT_MSB;
   hi2s3.Init.WSInversion = I2S_WS_INVERSION_DISABLE;
   hi2s3.Init.Data24BitAlignment = I2S_DATA_24BIT_ALIGNMENT_RIGHT;
-  hi2s3.Init.MasterKeepIOState = I2S_MASTER_KEEP_IO_STATE_DISABLE;
+  hi2s3.Init.MasterKeepIOState = I2S_MASTER_KEEP_IO_STATE_ENABLE;
   if (HAL_I2S_Init(&hi2s3) != HAL_OK)
   {
     Error_Handler();
@@ -129,6 +129,7 @@ void HAL_I2S_MspInit(I2S_HandleTypeDef* i2sHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
+  HAL_DMA_MuxSyncConfigTypeDef pSyncConfig= {0};
   if(i2sHandle->Instance==SPI1)
   {
   /* USER CODE BEGIN SPI1_MspInit 0 */
@@ -173,6 +174,16 @@ void HAL_I2S_MspInit(I2S_HandleTypeDef* i2sHandle)
     hdma_spi1_rx.Init.MemBurst = DMA_MBURST_SINGLE;
     hdma_spi1_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
     if (HAL_DMA_Init(&hdma_spi1_rx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_EXTI0;
+    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_NO_EVENT;
+    pSyncConfig.SyncEnable = DISABLE;
+    pSyncConfig.EventEnable = ENABLE;
+    pSyncConfig.RequestNumber = 1;
+    if (HAL_DMAEx_ConfigMuxSync(&hdma_spi1_rx, &pSyncConfig) != HAL_OK)
     {
       Error_Handler();
     }
@@ -231,6 +242,16 @@ void HAL_I2S_MspInit(I2S_HandleTypeDef* i2sHandle)
     hdma_spi2_rx.Init.MemBurst = DMA_MBURST_SINGLE;
     hdma_spi2_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
     if (HAL_DMA_Init(&hdma_spi2_rx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_DMAMUX1_CH0_EVT;
+    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_RISING;
+    pSyncConfig.SyncEnable = ENABLE;
+    pSyncConfig.EventEnable = DISABLE;
+    pSyncConfig.RequestNumber = 1;
+    if (HAL_DMAEx_ConfigMuxSync(&hdma_spi2_rx, &pSyncConfig) != HAL_OK)
     {
       Error_Handler();
     }
@@ -296,6 +317,16 @@ void HAL_I2S_MspInit(I2S_HandleTypeDef* i2sHandle)
     hdma_spi3_rx.Init.MemBurst = DMA_MBURST_SINGLE;
     hdma_spi3_rx.Init.PeriphBurst = DMA_PBURST_SINGLE;
     if (HAL_DMA_Init(&hdma_spi3_rx) != HAL_OK)
+    {
+      Error_Handler();
+    }
+
+    pSyncConfig.SyncSignalID = HAL_DMAMUX1_SYNC_DMAMUX1_CH0_EVT;
+    pSyncConfig.SyncPolarity = HAL_DMAMUX_SYNC_RISING;
+    pSyncConfig.SyncEnable = ENABLE;
+    pSyncConfig.EventEnable = DISABLE;
+    pSyncConfig.RequestNumber = 1;
+    if (HAL_DMAEx_ConfigMuxSync(&hdma_spi3_rx, &pSyncConfig) != HAL_OK)
     {
       Error_Handler();
     }
