@@ -1,5 +1,4 @@
 ../Core/Src/i2s.c:33:6:MX_I2S1_Init	8	static
 ../Core/Src/i2s.c:64:6:MX_I2S2_Init	8	static
-../Core/Src/i2s.c:95:6:MX_I2S3_Init	8	static
-../Core/Src/i2s.c:126:6:HAL_I2S_MspInit	72	static
-../Core/Src/i2s.c:242:6:HAL_I2S_MspDeInit	16	static
+../Core/Src/i2s.c:95:6:HAL_I2S_MspInit	56	static
+../Core/Src/i2s.c:210:6:HAL_I2S_MspDeInit	16	static
