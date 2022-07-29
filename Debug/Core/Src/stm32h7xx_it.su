@@ -13,4 +13,4 @@
 ../Core/Src/stm32h7xx_it.c:251:6:SPI1_IRQHandler	8	static
 ../Core/Src/stm32h7xx_it.c:265:6:SPI2_IRQHandler	8	static
 ../Core/Src/stm32h7xx_it.c:279:6:SPI3_IRQHandler	8	static
-../Core/Src/stm32h7xx_it.c:293:6:DMAMUX1_OVR_IRQHandler	8	static
+../Core/Src/stm32h7xx_it.c:293:6:DMAMUX1_OVR_IRQHandler	4	static

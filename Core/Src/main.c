@@ -139,6 +139,8 @@ void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s)
 
 		}
 
+	printf("%d,%d,%d,%d,%d,%d\r\n",hi2s1_Data_s[0],hi2s1_Data_s[1],hi2s2_Data_s[0],hi2s2_Data_s[1],hi2s3_Data_s[0],hi2s3_Data_s[1]);
+
 
 }
 /* USER CODE END 0 */
@@ -195,15 +197,13 @@ int main(void)
 //  LCD_Test();
 //  uint8_t text[20]={0};
 
-  HAL_I2S_Receive_DMA(&hi2s1, (uint16_t*)hi2s1_Data,&hi2s2, (uint16_t*)hi2s2_Data,&hi2s3, (uint16_t*)hi2s3_Data,2);
-//  HAL_I2S_Receive_DMA(&hi2s2, (uint16_t*)hi2s2_Data, 2);
-//  HAL_I2S_Receive_DMA(&hi2s3, (uint16_t*)hi2s3_Data, 2);
+  HAL_I2S_Receive_DMA3(&hi2s1, (uint16_t*)hi2s1_Data,&hi2s2, (uint16_t*)hi2s2_Data,&hi2s3, (uint16_t*)hi2s3_Data,2);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		printf("%d,%d,%d,%d,%d,%d\r\n",hi2s1_Data_s[0],hi2s1_Data_s[1],hi2s2_Data_s[0],hi2s2_Data_s[1],hi2s3_Data_s[0],hi2s3_Data_s[1]);
+
 
 //	  if(Pos_Neg)
 //	  {
