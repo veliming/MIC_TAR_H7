@@ -49,9 +49,11 @@
 /* USER CODE BEGIN PV */
   uint32_t hi2s1_Data[2]={0};
   uint32_t hi2s2_Data[2]={0};
+  uint32_t hi2s3_Data[2]={0};
 
   int32_t hi2s1_Data_s[2]={0};
   int32_t hi2s2_Data_s[2]={0};
+  int32_t hi2s3_Data_s[2]={0};
 
 /* USER CODE END PV */
 
@@ -120,6 +122,23 @@ void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s)
 
 		}
 
+	if(hi2s==&hi2s3){
+		//10 0
+		//11 1
+		if(hi2s3_Data[0] & 0x800000){//negative
+			hi2s3_Data_s[0]=0xff000000 | hi2s3_Data[0];
+		}else{//positive
+			hi2s3_Data_s[0]=0x00ffffff & hi2s3_Data[0];
+		}
+
+		if(hi2s3_Data[1] & 0x800000){//negative
+			hi2s3_Data_s[1]=0xff000000 | hi2s3_Data[1];
+		}else{//positive
+			hi2s3_Data_s[1]=0x00ffffff & hi2s3_Data[1];
+		}
+
+		}
+
 
 }
 /* USER CODE END 0 */
@@ -162,6 +181,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM3_Init();
   MX_UART4_Init();
+  MX_I2S3_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
 
@@ -177,12 +197,13 @@ int main(void)
 
   HAL_I2S_Receive_DMA(&hi2s1, (uint16_t*)hi2s1_Data, 2);
   HAL_I2S_Receive_DMA(&hi2s2, (uint16_t*)hi2s2_Data, 2);
+  HAL_I2S_Receive_DMA(&hi2s3, (uint16_t*)hi2s3_Data, 2);
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		printf("%d,%d,%d,%d\r\n",hi2s1_Data_s[0],hi2s1_Data_s[1],hi2s2_Data_s[0],hi2s2_Data_s[1]);
+		printf("%d,%d,%d,%d,%d,%d\r\n",hi2s1_Data_s[0],hi2s1_Data_s[1],hi2s2_Data_s[0],hi2s2_Data_s[1],hi2s3_Data_s[0],hi2s3_Data_s[1]);
 
 //	  if(Pos_Neg)
 //	  {
@@ -298,10 +319,11 @@ void PeriphCommonClock_Config(void)
 
   /** Initializes the peripherals clock
   */
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SPI2|RCC_PERIPHCLK_SPI1;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SPI3|RCC_PERIPHCLK_SPI2
+                              |RCC_PERIPHCLK_SPI1;
   PeriphClkInitStruct.PLL2.PLL2M = 10;
   PeriphClkInitStruct.PLL2.PLL2N = 128;
-  PeriphClkInitStruct.PLL2.PLL2P = 16;
+  PeriphClkInitStruct.PLL2.PLL2P = 2;
   PeriphClkInitStruct.PLL2.PLL2Q = 2;
   PeriphClkInitStruct.PLL2.PLL2R = 2;
   PeriphClkInitStruct.PLL2.PLL2RGE = RCC_PLL2VCIRANGE_1;

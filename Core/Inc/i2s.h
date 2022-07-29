@@ -36,12 +36,15 @@ extern I2S_HandleTypeDef hi2s1;
 
 extern I2S_HandleTypeDef hi2s2;
 
+extern I2S_HandleTypeDef hi2s3;
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
 void MX_I2S1_Init(void);
 void MX_I2S2_Init(void);
+void MX_I2S3_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
