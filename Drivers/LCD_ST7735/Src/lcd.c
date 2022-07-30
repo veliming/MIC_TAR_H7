@@ -77,14 +77,14 @@ void LCD_Test(void)
   uint32_t tick = get_tick();
 	while (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) != GPIO_PIN_SET)
 	{
-		delay_ms(10);
+		delay_ms(20);
 
 		if (get_tick() - tick <= 1000)
 			LCD_SetBrightness((get_tick() - tick) * 100 / 1000);
 		else if (get_tick() - tick <= 3000)
 		{
-			sprintf((char *)&text, "%03d", (get_tick() - tick - 1000) / 10);
-			LCD_ShowString(ST7735Ctx.Width - 30, 1, ST7735Ctx.Width, 16, 16, text);
+			sprintf((char *)&text, "Loading...");
+			LCD_ShowString(ST7735Ctx.Width - 100, 1, ST7735Ctx.Width, 16, 16, text);
 			ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, ST7735Ctx.Height - 3, (get_tick() - tick - 1000) * ST7735Ctx.Width / 2000, 3, 0xFFFF);
 		}
 		else if (get_tick() - tick > 3000)
@@ -98,12 +98,8 @@ void LCD_Test(void)
 
 	ST7735_LCD_Driver.FillRect(&st7735_pObj, 0, 0, ST7735Ctx.Width,ST7735Ctx.Height, BLACK);
 
-	sprintf((char *)&text, "WeAct Studio");
+	sprintf((char *)&text, "Sound Localization");
 	LCD_ShowString(4, 4, ST7735Ctx.Width, 16, 16, text);
-	sprintf((char *)&text, "STM32H7xx 0x%X", HAL_GetDEVID());
-	LCD_ShowString(4, 22, ST7735Ctx.Width, 16, 16, text);
-	sprintf((char *)&text, "LCD ID:0x%X", st7735_id);
-	LCD_ShowString(4, 40, ST7735Ctx.Width, 16, 16, text);
 
 	LCD_Light(100, 200);
 }

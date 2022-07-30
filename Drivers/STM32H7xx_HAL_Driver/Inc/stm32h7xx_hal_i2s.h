@@ -497,7 +497,6 @@ void HAL_I2S_IRQHandler(I2S_HandleTypeDef *hi2s);
 
 /* Non-Blocking mode: DMA */
 HAL_StatusTypeDef HAL_I2S_Transmit_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint16_t Size);
-//HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint16_t Size);
 HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2sa, uint16_t *pDataa,I2S_HandleTypeDef *hi2sb, uint16_t *pDatab,I2S_HandleTypeDef *hi2sc, uint16_t *pDatac, uint16_t Size);
 HAL_StatusTypeDef HAL_I2SEx_TransmitReceive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pTxData, uint16_t *pRxData,
                                                 uint16_t Size);

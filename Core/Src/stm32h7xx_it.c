@@ -287,25 +287,6 @@ void SPI3_IRQHandler(void)
   /* USER CODE END SPI3_IRQn 1 */
 }
 
-/**
-  * @brief This function handles DMAMUX1 overrun interrupt.
-  */
-void DMAMUX1_OVR_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMAMUX1_OVR_IRQn 0 */
-
-  /* USER CODE END DMAMUX1_OVR_IRQn 0 */
-  // Handle DMA1_Stream0
-  HAL_DMAEx_MUX_IRQHandler(&hdma_spi1_rx);
-  // Handle DMA1_Stream1
-  HAL_DMAEx_MUX_IRQHandler(&hdma_spi2_rx);
-  // Handle DMA1_Stream2
-  HAL_DMAEx_MUX_IRQHandler(&hdma_spi3_rx);
-  /* USER CODE BEGIN DMAMUX1_OVR_IRQn 1 */
-
-  /* USER CODE END DMAMUX1_OVR_IRQn 1 */
-}
-
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */

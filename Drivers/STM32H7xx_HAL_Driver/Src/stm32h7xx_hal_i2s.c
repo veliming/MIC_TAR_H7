@@ -1489,78 +1489,6 @@ HAL_StatusTypeDef HAL_I2S_Transmit_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData,
   *         between Master and Slave(example: audio streaming).
   * @retval HAL status
   */
-//HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2s, uint16_t *pData, uint16_t Size)
-//{
-//  HAL_StatusTypeDef errorcode = HAL_OK;
-//
-//  if ((pData == NULL) || (Size == 0UL))
-//  {
-//    return HAL_ERROR;
-//  }
-//
-//  if (hi2s->State != HAL_I2S_STATE_READY)
-//  {
-//    return HAL_BUSY;
-//  }
-//
-//  /* Process Locked */
-//  __HAL_LOCK(hi2s);
-//
-//  /* Set state and reset error code */
-//  hi2s->State       = HAL_I2S_STATE_BUSY_RX;
-//  hi2s->ErrorCode   = HAL_I2S_ERROR_NONE;
-//  hi2s->pRxBuffPtr  = pData;
-//  hi2s->RxXferSize  = Size;
-//  hi2s->RxXferCount = Size;
-//
-//  /* Init field not used in handle to zero */
-//  hi2s->pTxBuffPtr  = NULL;
-//  hi2s->TxXferSize  = (uint16_t)0UL;
-//  hi2s->TxXferCount = (uint16_t)0UL;
-//
-//
-//  /* Set the I2S Rx DMA Half transfer complete callback */
-//  hi2s->hdmarx->XferHalfCpltCallback = I2S_DMARxHalfCplt;
-//
-//  /* Set the I2S Rx DMA transfer complete callback */
-//  hi2s->hdmarx->XferCpltCallback = I2S_DMARxCplt;
-//
-//  /* Set the DMA error callback */
-//  hi2s->hdmarx->XferErrorCallback = I2S_DMAError;
-//
-//  /* Enable the Rx DMA Stream/Channel */
-//  if (HAL_OK != HAL_DMA_Start_IT(hi2s->hdmarx, (uint32_t)&hi2s->Instance->RXDR, (uint32_t)hi2s->pRxBuffPtr,
-//                                 hi2s->RxXferCount))
-//  {
-//    /* Update I2S error code */
-//    SET_BIT(hi2s->ErrorCode, HAL_I2S_ERROR_DMA);
-//    hi2s->State = HAL_I2S_STATE_READY;
-//    errorcode = HAL_ERROR;
-//    __HAL_UNLOCK(hi2s);
-//    return HAL_ERROR;
-//  }
-//
-//  /* Check if the I2S Rx request is already enabled */
-//  if (HAL_IS_BIT_CLR(hi2s->Instance->CFG1, SPI_CFG1_RXDMAEN))
-//  {
-//    /* Enable Rx DMA Request */
-//    SET_BIT(hi2s->Instance->CFG1, SPI_CFG1_RXDMAEN);
-//  }
-//
-//  /* Check if the I2S is already enabled */
-//  if (HAL_IS_BIT_CLR(hi2s->Instance->CR1, SPI_CR1_SPE))
-//  {
-//    /* Enable I2S peripheral */
-//    __HAL_I2S_ENABLE(hi2s);
-//  }
-//
-//  /* Start the transfer */
-//  SET_BIT(hi2s->Instance->CR1, SPI_CR1_CSTART);
-//
-//  __HAL_UNLOCK(hi2s);
-//  return errorcode;
-//}
-
 HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2sa, uint16_t *pDataa,I2S_HandleTypeDef *hi2sb, uint16_t *pDatab,I2S_HandleTypeDef *hi2sc, uint16_t *pDatac, uint16_t Size)
 {
   HAL_StatusTypeDef errorcode = HAL_OK;
@@ -1690,6 +1618,7 @@ HAL_StatusTypeDef HAL_I2S_Receive_DMA(I2S_HandleTypeDef *hi2sa, uint16_t *pDataa
   __HAL_UNLOCK(hi2sc);
   return errorcode;
 }
+
 
 /**
   * @brief  Full-Duplex Transmit/Receive data in non-blocking mode using DMA

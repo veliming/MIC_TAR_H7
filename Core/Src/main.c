@@ -37,6 +37,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define MAX_DATA_NUM 32
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,9 +53,10 @@
   uint32_t hi2s2_Data[2]={0};
   uint32_t hi2s3_Data[2]={0};
 
-  int32_t hi2s1_Data_s[2]={0};
-  int32_t hi2s2_Data_s[2]={0};
-  int32_t hi2s3_Data_s[2]={0};
+  int32_t hi2s_Data_s[6][32]={0};
+
+  uint8_t Times[3]={0};
+  float_t Servo=90.0;
 
 /* USER CODE END PV */
 
@@ -91,54 +94,77 @@ void HAL_I2S_RxCpltCallback(I2S_HandleTypeDef *hi2s)
 		//10 0
 		//11 1
 		if(hi2s1_Data[0] & 0x800000){//negative
-			hi2s1_Data_s[0]=(0xff000000 | hi2s1_Data[0]);
+			hi2s_Data_s[0][Times[0]]=(0xff000000 | hi2s1_Data[0]);
 		}else{//positive
-			hi2s1_Data_s[0]=0x00ffffff & hi2s1_Data[0];
+			hi2s_Data_s[0][Times[0]]=0x00ffffff & hi2s1_Data[0];
 		}
 
 		if(hi2s1_Data[1] & 0x800000){//negative
-			hi2s1_Data_s[1]=0xff000000 | hi2s1_Data[1];
+			hi2s_Data_s[1][Times[0]]=0xff000000 | hi2s1_Data[1];
 		}else{//positive
-			hi2s1_Data_s[1]=0x00ffffff & hi2s1_Data[1];
+			hi2s_Data_s[1][Times[0]]=0x00ffffff & hi2s1_Data[1];
+		}
+		printf("%d",&hi2s_Data_s[1][Times[0]]);
+		Times[0]++;
 		}
 
-		}
 
-
-	if(hi2s==&hi2s2){
+	else if(hi2s==&hi2s2){
 		//10 0
 		//11 1
 		if(hi2s2_Data[0] & 0x800000){//negative
-			hi2s2_Data_s[0]=0xff000000 | hi2s2_Data[0];
+			hi2s_Data_s[2][Times[1]]=0xff000000 | hi2s2_Data[0];
 		}else{//positive
-			hi2s2_Data_s[0]=0x00ffffff & hi2s2_Data[0];
+			hi2s_Data_s[2][Times[1]]=0x00ffffff & hi2s2_Data[0];
 		}
 
 		if(hi2s2_Data[1] & 0x800000){//negative
-			hi2s2_Data_s[1]=0xff000000 | hi2s2_Data[1];
+			hi2s_Data_s[3][Times[1]]=0xff000000 | hi2s2_Data[1];
 		}else{//positive
-			hi2s2_Data_s[1]=0x00ffffff & hi2s2_Data[1];
+			hi2s_Data_s[3][Times[1]]=0x00ffffff & hi2s2_Data[1];
+		}
+		printf("%d",&hi2s_Data_s[2][Times[1]]);
+		Times[1]++;
 		}
 
-		}
-
-	if(hi2s==&hi2s3){
+	else if(hi2s==&hi2s3){
 		//10 0
 		//11 1
 		if(hi2s3_Data[0] & 0x800000){//negative
-			hi2s3_Data_s[0]=0xff000000 | hi2s3_Data[0];
+			hi2s_Data_s[4][Times[2]]=0xff000000 | hi2s3_Data[0];
 		}else{//positive
-			hi2s3_Data_s[0]=0x00ffffff & hi2s3_Data[0];
+			hi2s_Data_s[4][Times[2]]=0x00ffffff & hi2s3_Data[0];
 		}
 
 		if(hi2s3_Data[1] & 0x800000){//negative
-			hi2s3_Data_s[1]=0xff000000 | hi2s3_Data[1];
+			hi2s_Data_s[5][Times[2]]=0xff000000 | hi2s3_Data[1];
 		}else{//positive
-			hi2s3_Data_s[1]=0x00ffffff & hi2s3_Data[1];
+			hi2s_Data_s[5][Times[2]]=0x00ffffff & hi2s3_Data[1];
+		}
+		printf("%d,%d\r\n",&hi2s_Data_s[4][Times[2]],&hi2s_Data_s[5][Times[2]]);
+
+		Times[2]++;
 		}
 
-		}
+	if((Times[0]==MAX_DATA_NUM)&&(Times[1]==MAX_DATA_NUM)&&(Times[2]==MAX_DATA_NUM))
+	{
+		HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_3);
+		Times[0]=0;
+		Times[1]=0;
+		Times[2]=0;
 
+	}
+
+
+}
+
+
+void Servo_con(float_t angel)
+{
+	if(angel<=180&&angel>=0)
+	{
+		TIM3->CCR1=500+angel/180.0*2000.0;
+	}
 
 }
 /* USER CODE END 0 */
@@ -185,52 +211,46 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
 
-//  uint32_t PWM=TIM3->CCR1;
-//  uint8_t  Pos_Neg=1;
+  uint32_t PWM=TIM3->CCR1;
+  uint8_t  Pos_Neg=1;
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-//  LCD_Test();
+  LCD_Test();
 //  uint8_t text[20]={0};
 
-  HAL_I2S_Receive_DMA(&hi2s1, (uint16_t*)hi2s1_Data,&hi2s2, (uint16_t*)hi2s2_Data,&hi2s3, (uint16_t*)hi2s3_Data,2);
-//  HAL_I2S_Receive_DMA(&hi2s2, (uint16_t*)hi2s2_Data, 2);
-//  HAL_I2S_Receive_DMA(&hi2s3, (uint16_t*)hi2s3_Data, 2);
+  HAL_I2S_Receive_DMA(&hi2s1, (uint16_t*)hi2s1_Data,&hi2s2, (uint16_t*)hi2s2_Data,&hi2s3, (uint16_t*)hi2s3_Data,MAX_DATA_NUM);
+  uint32_t tick = HAL_GetTick();
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		printf("%d,%d,%d,%d,%d,%d\r\n",hi2s1_Data_s[0],hi2s1_Data_s[1],hi2s2_Data_s[0],hi2s2_Data_s[1],hi2s3_Data_s[0],hi2s3_Data_s[1]);
 
-//	  if(Pos_Neg)
-//	  {
-//		  PWM+=10;
-//	  }
-//	  else
-//	  {
-//		  PWM-=10;
-//	  }
-//
-//	  if (PWM>2500)
-//	  {
-//		  Pos_Neg=0;
-//	  }
-//	  else if(PWM<500)
-//	  {
-//		  Pos_Neg=1;
-//	  }
-//	  else
-//	  {
-//		  TIM3->CCR1=PWM;
-//	  }
+
+	  if(HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_SET)
+		{
+			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_7);
+		}
+//		while (HAL_GPIO_ReadPin(KEY_GPIO_Port, KEY_Pin) == GPIO_PIN_SET)
+//		{
+//			delay_ms(10);
+//		}
+
+
+
+	  Servo_con(Servo);
+
+
+
+
 
 //		sprintf((char *)&text, "%8d", hi2s1_Data[0]);
 //		LCD_ShowString(4, 58, 256, 16, 16, text);
 //		printf("%lu,%lu\r\n",hi2s1_Data[0],hi2s1_Data[1]);
-//	  printf("hello\r\n");
+
 
 
 
